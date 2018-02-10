@@ -70,10 +70,7 @@ GCC_CONFIGURE_OPTS=					\
 			--without-libs			\
 			--without-headers		\
 			--with-newlib			\
-			--with-build-sysroot=$(TOOLBUILDDIR) \
-			--with-gmp=$(TOOLBUILDDIR) 	\
-			--with-mpfr=$(TOOLBUILDDIR)	\
-			--with-mpc=$(TOOLBUILDDIR);
+			--with-build-sysroot=$(TOOLBUILDDIR)
 
 
 EXTS += $(BINUTILS) $(GMP) $(MPFR) $(MPC) $(GCC) $(NEWLIB)
@@ -155,17 +152,19 @@ binutils: gmp mpfr mpc
 	$(MAKE) .binutils.built
 
 .gcc.built:
-	-rm $(EXTSDIR)/$(GCC)/newlib
+	-ln -s $(EXTSDIR)/$(MPFR) $(EXTSDIR)/$(GCC)/mpfr
+	-ln -s $(EXTSDIR)/$(MPC) $(EXTSDIR)/$(GCC)/mpc
+	-ln -s $(EXTSDIR)/$(GMP) $(EXTSDIR)/$(GCC)/gmp
 	-for i in $(EXTSDIR)/$(BINUTILS)/*/; do \
 		(cd $(EXTSDIR)/$(GCC); ln -s $$i); \
 	done
-	ln -s $(EXTSDIR)/$(NEWLIB)/newlib $(EXTSDIR)/$(GCC)/newlib
+	-ln -s $(EXTSDIR)/$(NEWLIB)/newlib $(EXTSDIR)/$(GCC)/newlib
 	mkdir -p $(TOOLBUILDDIR)/gcc;
 	(cd $(TOOLBUILDDIR)/gcc; $(EXTSDIR)/$(GCC)/configure $(GCC_CONFIGURE_OPTS))
 	$(MAKE) $(MAKEOPT) -C $(TOOLBUILDDIR)/gcc
 	touch .gcc.built
 
-gcc: gmp mpfr mpc
+gcc:
 	$(MAKE) .gcc.built
 
 toolchain_install:
