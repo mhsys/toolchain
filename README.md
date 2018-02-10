@@ -8,7 +8,7 @@ toolchain, needed to compile the Murgia Hack system.
 First you need to decide where to install the tools. By default will
 be installed in `/usr/local`.
 
-If you want to install the tools in /usr/local, type:
+If you want to install the tools in `/usr/local`, type:
 
     $ make all
     $ sudo -s -- make install
@@ -23,6 +23,6 @@ newlib libc for the MH system.
 
 ## Downloading sources
 
-Note that during 'make all' sources for binutils, gcc and newlib will be downloaded. If you want to only download the sources, type:
+Note that during `make all` sources for binutils, gcc and newlib will be downloaded. If you want to only download the sources, to compile later, type:
 
     $ make populate
